@@ -1,0 +1,23 @@
+[
+    {"url": "images/sky_1.jpg", "details": "sky_1", "category": "action"},
+    {"url": "images/sky_2.jpg", "details": "sky_2", "category": "comedie"},
+    {"url": "images/sky_3.jpg", "details": "sky_3", "category": "action"},
+    {"url": "images/sky_4.jpg", "details": "sky_4", "category": "action"},
+    {"url": "images/sky_5.jpg", "details": "sky_5", "category": "animation"},
+    {"url": "images/sky_6.jpg", "details": "sky_6", "category": "comedie"},
+    {"url": "images/sky_7.jpg", "details": "sky_7", "category": "action"},
+    {"url": "images/sky_8.jpg", "details": "sky_8", "category": "aventure"},
+    {"url": "images/sky_9.jpg", "details": "sky_9", "category": "action"},
+    {"url": "images/sky_10.jpg", "details": "sky_10", "category": "comedie"},
+    {"url": "images/sky_11.jpg", "details": "sky_11", "category": "action"},
+    {"url": "images/sky_12.jpg", "details": "sky_12", "category": "aventure"},
+    {"url": "images/sky_13.jpg", "details": "sky_13", "category": "action"},
+    {"url": "images/sky_14.jpg", "details": "sky_14", "category": "action"},
+    {"url": "images/sky_15.jpg", "details": "sky_15", "category": "comedie"},
+    {"url": "images/sky_16.jpg", "details": "sky_16", "category": "aventure"},
+    {"url": "images/sky_17.jpg", "details": "sky_17", "category": "action"},
+    {"url": "images/sky_18.jpg", "details": "sky_18", "category": "action"},
+    {"url": "images/sky_19.jpg", "details": "sky_19", "category": "aventure"},
+    {"url": "images/sky_20.jpg", "details": "sky_20", "category": "action"},
+    {"url": "images/sky_21.jpg", "details": "sky_21", "category": "animation"}
+]

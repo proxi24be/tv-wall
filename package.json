@@ -1,0 +1,25 @@
+{
+  "name": "tv-wall",
+  "version": "1.0.0",
+  "description": "Sandbox tests two way-bindings.",
+  "main": "index.html",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "knockout": "^3.4.0",
+    "requirejs": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proxi24be/tv-wall.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/proxi24be/tv-wall/issues"
+  },
+  "homepage": "https://github.com/proxi24be/tv-wall#readme"
+}
