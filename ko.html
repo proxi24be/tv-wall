@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,8 +30,8 @@
             }
         });
 
-        requirejs(['ko', 'airing', 'assetViewModel', 'categoryViewModel', 'underscore'],
-            function (ko, Airing, AssetViewModel, CategoryViewModel, underscore) {
+        requirejs(['ko', 'airing', 'assetViewModel', 'categoryViewModel', 'underscore', 'wallScroller'],
+            function (ko, Airing, AssetViewModel, CategoryViewModel, underscore, WallScroller) {
                 var airing = new Airing(),
                     categoryViewModel = new CategoryViewModel(airing.getCategories()),
                     assetViewModel = new AssetViewModel(airing.getAirings());
@@ -60,52 +61,97 @@
                     }
                 };
 
+                var wallScroller = new WallScroller('assetViewModel');
+                
+                var wallScrollerObserver = {
+                    update: function(event, data) {
+                        switch(event) {
+                            case wallScroller.EVENT_REACHED_BOTTOM:
+                                assetViewModel.loadMoreAsset();
+                                document.getElementById('numberOfItem').innerHTML = 
+                                    (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_REACHED_BOTTOM; 
+                                break;
+                            case wallScroller.EVENT_REACHED_TOP:
+                                assetViewModel.loadMoreAsset();
+                                document.getElementById('numberOfItem').innerHTML = 
+                                    (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_REACHED_TOP;
+                                break;
+                            case wallScroller.EVENT_SCROLL_UP:
+                                document.getElementById('numberOfItem').innerHTML = 
+                                    (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_SCROLL_UP;
+                                break;
+                            case wallScroller.EVENT_SCROLL_DOWN:
+                                document.getElementById('numberOfItem').innerHTML = 
+                                    (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_SCROLL_DOWN;
+                                break;
+                            default: 
+                        }
+                    }
+                }
+
+                wallScroller.addObserver(wallScrollerObserver);
+
             });
     </script>
     <style>
         .thumbnail > img {
             height: 140px;
         }
+        
+        #assetViewModel {
+            max-height: 500px;
+            overflow: auto;
+        }
     </style>
 </head>
 
 <body>
-<div id="tvWall" class="container">
-    <div class="row">
-        <form id="categoryViewModel" data-bind="foreach: getCategories()">
-            <div class="col-md-2">
-                <div class="checkbox">
-                    <label>
+    <div id="tvWall" class="container">
+        <div class="row">
+            <form id="categoryViewModel" data-bind="foreach: getCategories()">
+                <div class="col-md-2">
+                    <div class="checkbox">
+                        <label>
                         <input type="checkbox" data-bind="checkedValue: $data, checked: $root.getChosenCategories()"><!--ko text: category--><!--/ko-->
                     </label>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <button class="btn btn-primary" id="shuffle">shuffle</button>
-            <button class="btn btn-success" id="moreAsset">load more asset</button>
+            </form>
         </div>
-    </div>
-    <div id="assetViewModel" class="row" data-bind="foreach: getAssets()">
-        <div class="col-xs-6 col-md-3">
-            <div class="thumbnail">
-                <img data-bind="attr: { src: url, alt: details }">
-                <div class="caption">
-                    <h6><!--ko text: details--><!--/ko--></h6>
-                    <h6><!--ko text: category--><!--/ko--></h6>
-                </div>
+        <div class="row">
+            <div class="col-md-3">
+                <button class="btn btn-primary" id="shuffle">shuffle</button>
+                <button class="btn btn-success" id="moreAsset">load more asset</button>
+            </div>
+            <div class="col-md-6">
+                <h3 id="numberOfItem"></h3>
             </div>
         </div>
+        <div id="assetViewModel" class="row" data-bind="foreach: getAssets()">
+            <div class="col-xs-6 col-md-3">
+                <div class="thumbnail">
+                    <img data-bind="attr: { src: url, alt: details }">
+                    <div class="caption">
+                        <h6>
+                            <!--ko text: details-->
+                            <!--/ko-->
+                        </h6>
+                        <h6>
+                            <!--ko text: category-->
+                            <!--/ko-->
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<script>
+    <script>
 
 </script>
 
 
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
+
 </html>
