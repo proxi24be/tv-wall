@@ -69,12 +69,14 @@
                             case wallScroller.EVENT_REACHED_BOTTOM:
                                 assetViewModel.loadMoreAsset();
                                 document.getElementById('numberOfItem').innerHTML = 
-                                    (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_REACHED_BOTTOM; 
+                                    (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_REACHED_BOTTOM;
+                                wallScroller.recycleTop(wallScroller.getScrollInformation());
                                 break;
                             case wallScroller.EVENT_REACHED_TOP:
                                 assetViewModel.loadMoreAsset();
                                 document.getElementById('numberOfItem').innerHTML = 
                                     (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_REACHED_TOP;
+                                wallScroller.recycleBottom(wallScroller.getScrollInformation());
                                 break;
                             case wallScroller.EVENT_SCROLL_UP:
                                 document.getElementById('numberOfItem').innerHTML = 
