@@ -36,6 +36,10 @@ define(['observableEvent', 'underscore'], function(Observable, underscore) {
             return _scrollPosition;
         }
 
+        function getAssetInformation() {
+            return _assetInformation;
+        }
+
         function reachedBottom(container) {
             return container.scrollHeight - container.scrollTop === container.clientHeight;
         }
@@ -52,15 +56,12 @@ define(['observableEvent', 'underscore'], function(Observable, underscore) {
             return container.scrollTop > _scrollPosition.current; 
         }
 
-        function recycleTop(scrollInformation) {
-            var delta = scrollInformation.current - scrollInformation.clientHeight;
-            console.warn('recycleTop', delta);
+        function recycleTop(numberOfElementsToRecycle) {
+            console.warn('recycleTop', numberOfElementsToRecycle);
         }
 
-        function recycleBottom(scrollInformation) {
-            var delta = 
-                scrollInformation.scrollHeight - scrollInformation.current + scrollInformation.clientHeight;
-            console.warn('recycleBottom', delta);
+        function recycleBottom(numberOfElementsToRecycle) {
+            console.warn('recycleBottom', numberOfElementsToRecycle);
         }
 
         function hideElement(numberOfElement) {
@@ -70,25 +71,30 @@ define(['observableEvent', 'underscore'], function(Observable, underscore) {
             }
         }
 
-        function getNumberOfElementPerRow() {
-            if (_assetInformation.offsetHeight === 0) {
-                updateAssetInformation();
-            }
-            
-            var scrollInformation = getScrollInformation();
-
-            return Math.floor(scrollInformation.clientWidth / _assetInformation.offsetWidth);
+        function getNumberOfElementsPerRow(scrollInformation, assetInformation) {
+            return Math.floor(scrollInformation.clientWidth / assetInformation.offsetWidth);
         }
 
-        function computeScroll() {
-            var elementPerRow = getNumberOfElementPerRow();
-            var scrollInformation = getScrollInformation();
+        function getNumberOfRowsScrolled(scrollInformation, assetInformation) {
+            return Math.floor(scrollInformation.current / assetInformation.offsetHeight);
+        }
 
-            console.warn(
-                scrollInformation.scrollHeight / _assetInformation.offsetHeight,
-                scrollInformation.scrollHeight,
-                _assetInformation.offsetHeight
-            );
+        function getTotalOfRows(scrollInformation, assetInformation) {
+            return Math.floor(scrollInformation.scrollHeight / assetInformation.offsetHeight);
+        }
+
+        function getNumberOfBufferedRowsAllowed(scrollInformation, assetInformation) {
+            return Math.floor((scrollInformation.clientHeight * 2) / assetInformation.offsetHeight);
+        }
+
+        function getNumberOfElementToRecycle() {
+            var scrollInformation = getScrollInformation(),
+                assetInformation = getAssetInformation();
+            
+            var delta = getNumberOfRowsScrolled(scrollInformation, assetInformation) 
+                - getNumberOfBufferedRowsAllowed(scrollInformation, assetInformation);
+            
+            return delta * getNumberOfElementsPerRow(scrollInformation, assetInformation);
         }
 
         function updateAssetInformation() {
@@ -120,7 +126,12 @@ define(['observableEvent', 'underscore'], function(Observable, underscore) {
                 _scrollPosition.clientHeight = this.clientHeight;
                 _scrollPosition.clientWidth = this.clientWidth;
 
-                console.warn('number of rows ', _scrollPosition.current / _assetInformation.offsetHeight);
+                var numberOfElementsToRecycle = getNumberOfElementToRecycle();
+                if (numberOfElementsToRecycle > 0) {
+                    recycleTop(numberOfElementsToRecycle);
+                } else {
+                    recycleBottom(numberOfElementsToRecycle);
+                }
             }, 250));
 
             window.addEventListener('resize', function(event) {
@@ -147,13 +158,11 @@ define(['observableEvent', 'underscore'], function(Observable, underscore) {
 
         _this.recycleBottom = recycleBottom;
 
-        _this.getNumberOfElementPerRow = getNumberOfElementPerRow;
+        _this.getNumberOfElementsPerRow = getNumberOfElementsPerRow;
 
         _this.hideElement = hideElement;
 
         _this.updateAssetInformation = updateAssetInformation;
-
-        _this.computeScroll = computeScroll;
     };
 
     return WallScroller;
