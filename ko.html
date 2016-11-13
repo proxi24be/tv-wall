@@ -71,6 +71,9 @@
                                 document.getElementById('numberOfItem').innerHTML = 
                                     (assetViewModel.getAssets())().length + ' ' + wallScroller.EVENT_REACHED_BOTTOM;
                                 wallScroller.recycleTop(wallScroller.getScrollInformation());
+                                
+                                wallScroller.computeScroll();
+
                                 break;
                             case wallScroller.EVENT_REACHED_TOP:
                                 assetViewModel.loadMoreAsset();
@@ -92,7 +95,6 @@
                 }
 
                 wallScroller.addObserver(wallScrollerObserver);
-
             });
     </script>
     <style>
@@ -131,7 +133,7 @@
         </div>
         <div id="assetViewModel" class="row" data-bind="foreach: getAssets()">
             <div class="col-xs-6 col-md-3">
-                <div class="thumbnail">
+                <div class="thumbnail js-asset">
                     <img data-bind="attr: { src: url, alt: details }">
                     <div class="caption">
                         <h6>
